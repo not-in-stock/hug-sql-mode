@@ -18,11 +18,11 @@
 
 (require 'rx)
 
-(rx-defconst clj-string
+(defconst clj-string
   (rx "\"" (* nonl) "\"")
   "Matches Clojure string literal.")
 
-(rx-defconst clj-multiline-exp
+(defconst clj-multiline-exp
   (rx (group "/*")
       (group "~")
       " "
@@ -31,13 +31,13 @@
       (group "*/"))
   "Group 3 matches Clojure multiline expressions.")
 
-(rx-defconst clj-keyword
+(defconst clj-keyword
   (rx (group (or bol (not ":")))
       (group ":"
              (+ (group (any alnum "-+_<>.*/?")))))
   "Group 2 matches Clojure keyword.")
 
-(rx-defconst clj-keyword-namespace
+(defconst clj-keyword-namespace
   (rx (group (or bol (not ":")))
       (group ":")
       (group (+ (any alnum "-+_<>.*?")))
@@ -45,7 +45,7 @@
   "Group 3 matches Clojure keyword namespace.
    Group 4 matches forward slash.")
 
-(rx-defconst sql-functon-name
+(defconst sql-functon-name
   (rx (group ":name ")
       (group (+ (any alnum "-+_<>.*/?"))))
   "Group 3 matches HugSQL function name.")

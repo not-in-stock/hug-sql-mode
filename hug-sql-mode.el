@@ -66,7 +66,7 @@
 
   (if hug-sql-mode
       (progn
-        (font-lock-remove-keywords nil hug-sql-mode-keywords)
+        (font-lock-remove-keywords 'sql-mode hug-sql-mode-keywords)
         (font-lock-add-keywords 'sql-mode hug-sql-mode-keywords)
         (font-lock-flush))
     (font-lock-remove-keywords nil hug-sql-mode-keywords)

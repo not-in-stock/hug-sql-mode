@@ -58,12 +58,24 @@
                             (4 'default t))
     (,sql-functon-name 2 'font-lock-function-name-face t)))
 
-(define-derived-mode hug-sql-mode sql-mode "HugSQL Mode"
-  "HugSQL mode"
-  (font-lock-add-keywords nil hug-sql-mode-keywords))
+(define-minor-mode hug-sql-mode
+  "Minor mode for HugSQL support in SQL buffers."
+  :lighter " HugSQL"
+  :keymap (make-sparse-keymap)
+  :syntax-table sql-mode-syntax-table
+  (font-lock-add-keywords 'sql-mode hug-sql-mode-keywords))
 
 ;;;###autoload
-(add-to-list 'auto-mode-alist
-             `(,(rx ".sql" eos) . hug-sql-mode))
+(add-hook 'sql-mode-hook #'hug-sql-mode)
 
 (provide 'hug-sql-mode)
+
+;; (define-derived-mode hug-sql-mode sql-mode "HugSQL Mode"
+;;   "HugSQL mode"
+;;   (font-lock-add-keywords nil hug-sql-mode-keywords))
+
+;; ;;;###autoload
+;; (add-to-list 'auto-mode-alist
+;;              `(,(rx ".sql" eos) . hug-sql-mode))
+
+;; (provide 'hug-sql-mode)

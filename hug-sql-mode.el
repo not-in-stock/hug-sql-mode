@@ -50,7 +50,7 @@
       (group (+ (any alnum "-+_<>.*/?"))))
   "Group 3 matches HugSQL function name.")
 
-(defvar hug-slq-mode-keywords
+(defvar hug-sql-mode-keywords
   `((,clj-string 0 'clojure-character-face t)
     (,clj-multiline-exp 3 'font-lock-function-name-face t)
     (,clj-keyword 2 'clojure-keyword-face t)
@@ -60,7 +60,7 @@
 
 (define-derived-mode hug-sql-mode sql-mode "HugSQL Mode"
   "HugSQL mode"
-  (font-lock-add-keywords nil hug-slq-mode-keywords))
+  (font-lock-add-keywords nil hug-sql-mode-keywords))
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist

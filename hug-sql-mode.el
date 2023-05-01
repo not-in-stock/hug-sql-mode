@@ -64,10 +64,10 @@
   :keymap (make-sparse-keymap)
   :syntax-table sql-mode-syntax-table
   (when (bound-and-true-p hug-sql-mode)
-    (font-lock-add-keywords 'sql-mode hug-sql-mode-keywords)
+    (font-lock-add-keywords nil hug-sql-mode-keywords)
     (font-lock-fontify-buffer))
   (when (not (bound-and-true-p hug-sql-mode))
-    (font-lock-remove-keywords 'sql-mode hug-sql-mode-keywords)
+    (font-lock-remove-keywords nil hug-sql-mode-keywords)
     (font-lock-fontify-buffer)))
 
 ;;;###autoload

@@ -62,15 +62,16 @@
   "Minor mode for HugSQL support in SQL buffers."
   :lighter " HugSQL"
   :keymap (make-sparse-keymap)
-  :syntax-table sql-mode-syntax-table
-  (when (bound-and-true-p hug-sql-mode)
-    (font-lock-add-keywords nil hug-sql-mode-keywords)
-    (font-lock-fontify-buffer))
-  (when (not (bound-and-true-p hug-sql-mode))
-    (font-lock-remove-keywords nil hug-sql-mode-keywords)
-    (font-lock-fontify-buffer)))
+  :global nil
+
+  (if hug-sql-mode
+      (progn
+        (font-lock-add-keywords 'sql-mode hug-sql-mode-keywords)
+        (font-lock-flush))
+    (font-lock-remove-keywords 'sql-mode hug-sql-mode-keywords)
+    (font-lock-flush)))
 
 ;;;###autoload
-(add-hook 'sql-mode-hook #'hug-sql-mode)
+(add-hook 'sql-mode-hook 'hug-sql-mode)
 
 (provide 'hug-sql-mode)

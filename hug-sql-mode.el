@@ -69,13 +69,3 @@
 (add-hook 'sql-mode-hook #'hug-sql-mode)
 
 (provide 'hug-sql-mode)
-
-;; (define-derived-mode hug-sql-mode sql-mode "HugSQL Mode"
-;;   "HugSQL mode"
-;;   (font-lock-add-keywords nil hug-sql-mode-keywords))
-
-;; ;;;###autoload
-;; (add-to-list 'auto-mode-alist
-;;              `(,(rx ".sql" eos) . hug-sql-mode))
-
-;; (provide 'hug-sql-mode)

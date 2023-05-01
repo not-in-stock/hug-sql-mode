@@ -66,11 +66,14 @@
 
   (if hug-sql-mode
       (progn
-        (font-lock-remove-keywords 'sql-mode hug-sql-mode-keywords)
+        (font-lock-remove-keywords nil hug-sql-mode-keywords)
         (font-lock-add-keywords 'sql-mode hug-sql-mode-keywords)
-        (font-lock-flush))
-    (font-lock-remove-keywords nil hug-sql-mode-keywords)
-    (font-lock-flush)))
+        (font-lock-flush)
+        (sit-for 0))
+    (progn
+      (font-lock-remove-keywords nil hug-sql-mode-keywords)
+      (font-lock-flush)
+      (sit-for 0))))
 
 ;;;###autoload
 (add-hook 'sql-mode-hook 'hug-sql-mode)

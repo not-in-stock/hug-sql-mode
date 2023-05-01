@@ -1,3 +1,21 @@
+;;; hug-sql-mode.el --- HugSQL mode
+;;
+;; Author: Andrei Fedorov
+;; URL: https://github.com/yourusername/my-package
+;; Version: 0.1
+;; Package-Requires: ((emacs "24.4"))
+;; Keywords: sql clojure hugsql
+;;
+;; This file is not part of GNU Emacs.
+;;
+;;; License: GPLv3
+
+;;; Commentary:
+
+;; Provides font-lock for HugSQL (https://www.hugsql.org).
+
+;;; Code:
+
 (require 'rx)
 
 (rx-defconst clj-string
@@ -44,7 +62,7 @@
   "HugSQL mode"
   (font-lock-add-keywords nil hug-slq-mode-keywords))
 
-;; autoload
+;;;###autoload
 (add-to-list 'auto-mode-alist
              `(,(rx ".sql" eos) . hug-sql-mode))
 

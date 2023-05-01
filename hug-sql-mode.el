@@ -1,0 +1,51 @@
+(require 'rx)
+
+(rx-defconst clj-string
+  (rx "\"" (* nonl) "\"")
+  "Matches Clojure string literal.")
+
+(rx-defconst clj-multiline-exp
+  (rx (group "/*")
+      (group "~")
+      " "
+      (group (+? nonl))
+      (? (group "~"))
+      (group "*/"))
+  "Group 3 matches Clojure multiline expressions.")
+
+(rx-defconst clj-keyword
+  (rx (group (or bol (not ":")))
+      (group ":"
+             (+ (group (any alnum "-+_<>.*/?")))))
+  "Group 2 matches Clojure keyword.")
+
+(rx-defconst clj-keyword-namespace
+  (rx (group (or bol (not ":")))
+      (group ":")
+      (group (+ (any alnum "-+_<>.*?")))
+      (group "/"))
+  "Group 3 matches Clojure keyword namespace.
+   Group 4 matches forward slash.")
+
+(rx-defconst sql-functon-name
+  (rx (group ":name ")
+      (group (+ (any alnum "-+_<>.*/?"))))
+  "Group 3 matches HugSQL function name.")
+
+(defvar hug-slq-mode-keywords
+  `((,clj-string 0 'clojure-character-face t)
+    (,clj-multiline-exp 3 'font-lock-function-name-face t)
+    (,clj-keyword 2 'clojure-keyword-face t)
+    (,clj-keyword-namespace (3 'font-lock-type-face t)
+                            (4 'default t))
+    (,sql-functon-name 2 'font-lock-function-name-face t)))
+
+(define-derived-mode hug-sql-mode sql-mode "HugSQL Mode"
+  "HugSQL mode"
+  (font-lock-add-keywords nil hug-slq-mode-keywords))
+
+;; autoload
+(add-to-list 'auto-mode-alist
+             `(,(rx ".sql" eos) . hug-sql-mode))
+
+(provide 'hug-sql-mode)

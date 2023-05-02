@@ -66,14 +66,24 @@
 
   (if hug-sql-mode
       (progn
-        (font-lock-remove-keywords nil hug-sql-mode-keywords)
+        (message "Enabling hug-sql-mode")
         (font-lock-add-keywords 'sql-mode hug-sql-mode-keywords)
         (font-lock-flush)
-        (sit-for 0))
-    (progn
-      (font-lock-remove-keywords nil hug-sql-mode-keywords)
-      (font-lock-flush)
-      (sit-for 0))))
+        (font-lock-fontify-buffer)
+        (message "Current font-lock keywords: %s"
+                 (cl-remove-if-not (lambda (kw)
+                                     (memq (car kw) (mapcar 'car hug-sql-mode-keywords))))
+                 font-lock-keywords :test 'equal))
+    (message "Disabling hug-sql-mode")
+    (font-lock-remove-keywords nil hug-sql-mode-keywords)
+    (font-lock-flush)
+    (font-lock-fontify-buffer)
+    (message "Current font-lock keywords: %s"
+             (cl-remove-if-not (lambda (kw)
+                                 (memq (car kw) (mapcar 'car hug-sql-mode-keywords))))
+             font-lock-keywords :test 'equal)))
+
+
 
 ;;;###autoload
 (add-hook 'sql-mode-hook 'hug-sql-mode)

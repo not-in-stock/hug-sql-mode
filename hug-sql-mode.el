@@ -73,13 +73,18 @@
 
 (define-minor-mode hug-sql-mode
   "Minor mode for HugSQL support in SQL buffers."
-  :lighter " HugSQL"
+  :lighter "HugSQL"
   :keymap (make-sparse-keymap)
-  :global nil
-
   (if hug-sql-mode
-      (hug-sql-add-keywords)
-    (hug-sql-remove-keywords))
+      (progn
+        (message "Enabling hug-sql-mode")
+        (font-lock-remove-keywords nil hug-sql-mode-keywords)
+        (font-lock-add-keywords nil hug-sql-mode-keywords 'append))
+    (message "Disabling hug-sql-mode")
+    (font-lock-remove-keywords nil hug-sql-mode-keywords))
+  ;; (if hug-sql-mode
+  ;;     (hug-sql-add-keywords)
+  ;;   (hug-sql-remove-keywords))
   (font-lock-flush))
 
 ;;;###autoload

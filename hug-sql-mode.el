@@ -58,6 +58,19 @@
                             (4 'default t))
     (,sql-functon-name 2 'font-lock-function-name-face t)))
 
+(defvar hug-sql--installed-keywords nil)
+
+(defun hug-sql-add-keywords ()
+  (when (local-variable-p 'hug-sql--installed-keywords)
+    (font-lock-remove-keywords nil hug-sql--installed-keywords))
+  (let ((keywords hug-sql-mode-keywords))
+    (set (make-local-variable 'hug-sql--installed-keywords)
+         keywords)
+    (font-lock-add-keywords nil keywords 'append)))
+
+(defun hug-sql-remove-keywords ()
+  (font-lock-remove-keywords nil hug-sql--installed-keywords))
+
 (define-minor-mode hug-sql-mode
   "Minor mode for HugSQL support in SQL buffers."
   :lighter " HugSQL"
@@ -65,25 +78,9 @@
   :global nil
 
   (if hug-sql-mode
-      (progn
-        (message "Enabling hug-sql-mode")
-        (font-lock-add-keywords 'sql-mode hug-sql-mode-keywords)
-        (font-lock-flush)
-        (font-lock-fontify-buffer)
-        (message "Current font-lock keywords: %s"
-                 (cl-remove-if-not (lambda (kw)
-                                     (memq (car kw) (mapcar 'car hug-sql-mode-keywords))))
-                 font-lock-keywords :test 'equal))
-    (message "Disabling hug-sql-mode")
-    (font-lock-remove-keywords nil hug-sql-mode-keywords)
-    (font-lock-flush)
-    (font-lock-fontify-buffer)
-    (message "Current font-lock keywords: %s"
-             (cl-remove-if-not (lambda (kw)
-                                 (memq (car kw) (mapcar 'car hug-sql-mode-keywords))))
-             font-lock-keywords :test 'equal)))
-
-
+      (hug-sql-add-keywords)
+    (hug-sql-remove-keywords))
+  (font-lock-flush))
 
 ;;;###autoload
 (add-hook 'sql-mode-hook 'hug-sql-mode)

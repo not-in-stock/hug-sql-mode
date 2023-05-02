@@ -77,10 +77,10 @@
   :keymap (make-sparse-keymap)
   (if hug-sql-mode
       (progn
-        (message "Enabling hug-sql-mode")
+        (message "Enabling hug-sql-mode in %s" (buffer-name))
         (font-lock-remove-keywords nil hug-sql-mode-keywords)
         (font-lock-add-keywords nil hug-sql-mode-keywords 'append))
-    (message "Disabling hug-sql-mode")
+    (message "Disabling hug-sql-mode  in %s" (buffer-name))
     (font-lock-remove-keywords nil hug-sql-mode-keywords))
   ;; (if hug-sql-mode
   ;;     (hug-sql-add-keywords)

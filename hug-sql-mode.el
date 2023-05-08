@@ -41,7 +41,7 @@
 (defconst clj-keyword
   (rx (group (or bol (not ":")))
       (group ":"
-             (+ (group (any alnum "-+_<>.*/?")))))
+             (+ (group (any alnum "-+_<>.*/?!")))))
   "Group 2 matches Clojure keyword.")
 
 (defconst clj-keyword-namespace

@@ -22,6 +22,13 @@
   (rx "\"" (* nonl) "\"")
   "Matches Clojure string literal.")
 
+(defconst clj-single-line-exp
+  (rx (group "--")
+      (group "~")
+      " "
+      (group "(" (+ nonl) ")"))
+  "Group 3 matches Clojure single line expressions.")
+
 (defconst clj-multiline-exp
   (rx (group "/*")
       (group "~")

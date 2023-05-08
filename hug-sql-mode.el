@@ -59,7 +59,8 @@
 
 (defvar hug-sql-mode-keywords
   `((,clj-string 0 'clojure-character-face t)
-    (,clj-multiline-exp 3 'font-lock-function-name-face t)
+    (,clj-multiline-exp 3 'font-lock-preprocessor-face t)
+    (,clj-single-line-exp 3 'font-lock-preprocessor-face t)
     (,clj-keyword 2 'clojure-keyword-face t)
     (,clj-keyword-namespace (3 'font-lock-type-face t)
                             (4 'default t))

@@ -2,7 +2,7 @@
 ;;
 ;; Author: Andrei Fedorov
 ;; URL: https://github.com/yourusername/my-package
-;; Version: 0.1
+;; Version: 0.1.2
 ;; Package-Requires: ((emacs "24.4") (clojure-mode "5.1.0"))
 ;; Keywords: sql clojure hugsql
 ;;
@@ -38,6 +38,24 @@
       (group "*/"))
   "Group 3 matches Clojure multiline expressions.")
 
+(defconst clj-multiline-exp-spr
+  (rx (group "/*~")
+      (zero-or-more
+       (not (any "*" "/")))
+      (group "~*/"))
+  "Group 3 matches Clojure multiline expressions.")
+
+;; (setq-local syntax-propertize-function
+;;   (syntax-propertize-rules
+;;    ("\\(/*\\)\\(~\\)" (2 "<"))
+;;    ("\\(~\\)\\(*/\\)" (1 "> b"))))
+
+(defconst clj-multiline-separator
+  (rx (group "/*")
+      (group "~")
+      (group "*/"))
+  "Group 3 matches Clojure multiline expressions.")
+
 (defconst clj-keyword
   (rx (group (or bol (not ":")))
       (group ":"
@@ -58,9 +76,13 @@
   "Group 3 matches HugSQL function name.")
 
 (defvar hug-sql-mode-keywords
-  `((,clj-string 0 'clojure-character-face t)
-    (,clj-multiline-exp 3 'font-lock-preprocessor-face t)
-    (,clj-single-line-exp 3 'font-lock-preprocessor-face t)
+  `(
+    (,clj-multiline-exp (2 'font-lock-builtin-face t)
+                        (3 'font-lock-type-face t))
+    (,clj-multiline-separator 2 'font-lock-builtin-face t)
+    (,clj-single-line-exp (2 'font-lock-builtin-face t)
+                          (3 'font-lock-type-face t))
+    (,clj-string 0 'clojure-character-face t)
     (,clj-keyword 2 'clojure-keyword-face t)
     (,clj-keyword-namespace (3 'font-lock-type-face t)
                             (4 'default t))
@@ -72,9 +94,8 @@
   (when (local-variable-p 'hug-sql--installed-keywords)
     (font-lock-remove-keywords nil hug-sql--installed-keywords))
   (let ((keywords hug-sql-mode-keywords))
-    (set (make-local-variable 'hug-sql--installed-keywords)
-         keywords)
-    (font-lock-add-keywords nil keywords 'append)))
+    (set (make-local-variable 'hug-sql--installed-keywords) keywords)
+    (font-lock-add-keywords 'sql-mode keywords 'append)))
 
 (defun hug-sql-remove-keywords ()
   (font-lock-remove-keywords nil hug-sql--installed-keywords))
@@ -83,13 +104,16 @@
   "Minor mode for HugSQL support in SQL buffers."
   :lighter "HugSQL"
   :keymap (make-sparse-keymap)
-  (if hug-sql-mode
-      (font-lock-add-keywords nil hug-sql-mode-keywords 'append)
-    (font-lock-remove-keywords nil hug-sql-mode-keywords))
-  ;; (if hug-sql-mode
-  ;;     (hug-sql-add-keywords)
-  ;;   (hug-sql-remove-keywords))
-  (font-lock-flush))
+  (progn
+    (if hug-sql-mode
+        (font-lock-add-keywords 'sql-mode hug-sql-mode-keywords ;; 'append
+                                ) ;; (font-lock-remove-keywords nil hug-sql-mode-keywords)
+      )
+    ;; (if hug-sql-mode
+    ;;     (hug-sql-add-keywords)
+    ;;   (hug-sql-remove-keywords))
+    (font-lock-flush))
+)
 
 ;;;###autoload
 (add-hook 'sql-mode-hook 'hug-sql-mode)

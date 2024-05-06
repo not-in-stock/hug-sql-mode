@@ -100,6 +100,7 @@
 (defun hug-sql-remove-keywords ()
   (font-lock-remove-keywords nil hug-sql--installed-keywords))
 
+;;;###autoload
 (define-minor-mode hug-sql-mode
   "Minor mode for HugSQL support in SQL buffers."
   :lighter "HugSQL"

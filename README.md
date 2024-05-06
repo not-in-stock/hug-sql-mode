@@ -1,6 +1,6 @@
 # hug-sql-mode
 
-`hug-sql-mode` is a minor mode for Emacs based on `sql-mode`. It provides additional font-locking support for HugSQL.
+`hug-sql-mode` is a minor mode for Emacs based on `sql-mode`. It provides additional font-locking support for [HugSQL](https://github.com/layerware/hugsql).
 
 ## Usage
 

@@ -2,7 +2,7 @@
 ;;
 ;; Author: Andrei Fedorov
 ;; URL: https://github.com/yourusername/my-package
-;; Version: 0.1.2
+;; Version: 0.1.3
 ;; Package-Requires: ((emacs "24.4") (clojure-mode "5.1.0"))
 ;; Keywords: sql clojure hugsql
 ;;

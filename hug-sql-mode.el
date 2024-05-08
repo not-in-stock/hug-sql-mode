@@ -96,6 +96,18 @@
 (defun hug-sql-remove-keywords ()
   (font-lock-remove-keywords nil hug-sql--installed-keywords))
 
+(defun font-lock-extend-region ()
+  "Extend the search region to include an entire block of text."
+  (eval-when-compile (defvar font-lock-beg) (defvar font-lock-end))
+  (save-excursion
+    (goto-char font-lock-beg)
+    (let ((found (or (re-search-backward "\n\n" nil t) (point-min))))
+      (goto-char font-lock-end)
+      (when (re-search-forward "\n\n" nil t)
+        (beginning-of-line)
+        (setq font-lock-end (point)))
+      (setq font-lock-beg found))))
+
 ;;;###autoload
 (define-minor-mode hug-sql-mode
   "Minor mode for HugSQL support in SQL buffers."
@@ -114,5 +126,8 @@
 
 ;;;###autoload
 (add-hook 'sql-mode-hook 'hug-sql-mode)
+
+;;;###autoload
+(add-hook 'font-lock-extend-region-functions 'font-lock-extend-region)
 
 (provide 'hug-sql-mode)

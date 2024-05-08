@@ -98,7 +98,6 @@ order by id
             [hugsql.parameters :refer [identifier-param-quote]] */
        update :i:table set
 /*~
- HOBA
   (string/join ","
     (for [[field _] (:updates params)]
       (str (identifier-param-quote (name field) options)

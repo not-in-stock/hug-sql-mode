@@ -45,11 +45,6 @@
       (group "~*/"))
   "Group 3 matches Clojure multiline expressions.")
 
-;; (setq-local syntax-propertize-function
-;;   (syntax-propertize-rules
-;;    ("\\(/*\\)\\(~\\)" (2 "<"))
-;;    ("\\(~\\)\\(*/\\)" (1 "> b"))))
-
 (defconst clj-multiline-separator
   (rx (group "/*")
       (group "~")

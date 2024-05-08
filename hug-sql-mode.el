@@ -32,8 +32,9 @@
 (defconst clj-multiline-exp
   (rx (group "/*")
       (group "~")
-      " "
-      (group (+? nonl))
+      (or " " ?\n)
+      (group (+? anychar))
+      (or " " ?\n)
       (? (group "~"))
       (group "*/"))
   "Group 3 matches Clojure multiline expressions.")

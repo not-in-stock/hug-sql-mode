@@ -66,6 +66,31 @@ Group 3: namespace, Group 4: forward slash.")
   "HugSQL function name declaration.
 Group 1: function name.")
 
+(defconst hug-sql-mode--doc-string
+  (rx bol (* space) "-- :doc "
+      (group (+ nonl)))
+  "HugSQL documentation string: -- :doc ...
+Group 1: doc text.")
+
+(defun hug-sql-mode--match-require-block (limit)
+  "Match /* :require ... */ blocks up to LIMIT.
+Sets match groups:
+  1 - opening /* :require
+  2 - require content
+  3 - closing */."
+  (when (re-search-forward "/\\* :require" limit t)
+    (let ((block-beg (match-beginning 0))
+          (content-beg (match-end 0)))
+      (when (re-search-forward "\\*/" limit t)
+        (let ((content-end (match-beginning 0))
+              (block-end (match-end 0)))
+          (set-match-data
+           (list block-beg block-end
+                 block-beg content-beg
+                 content-beg content-end
+                 (match-beginning 0) block-end))
+          t)))))
+
 ;;; Font-lock function matchers (for multiline constructs)
 
 (defun hug-sql-mode--match-clj-block (limit)
@@ -108,10 +133,16 @@ Sets match groups:
 ;;; Font-lock keywords
 
 (defvar hug-sql-mode--keywords
-  `((hug-sql-mode--match-clj-block
+  `(;; Multiline matchers first (set base face, then overridden by later rules)
+    (hug-sql-mode--match-clj-block
      (1 'font-lock-builtin-face t)
      (2 'font-lock-type-face t t)
      (3 'font-lock-builtin-face t t))
+    (hug-sql-mode--match-require-block
+     (1 'font-lock-preprocessor-face t)
+     (2 'font-lock-type-face t)
+     (3 'font-lock-preprocessor-face t))
+    ;; Inline matchers (override base faces inside blocks)
     (,hug-sql-mode--single-line-exp
      (2 'font-lock-builtin-face t)
      (3 'font-lock-type-face t))
@@ -121,7 +152,9 @@ Sets match groups:
      (3 'font-lock-type-face t)
      (4 'default t))
     (,hug-sql-mode--function-name
-     1 'font-lock-function-name-face t))
+     1 'font-lock-function-name-face t)
+    (,hug-sql-mode--doc-string
+     1 'font-lock-doc-face t))
   "Font-lock keywords for HugSQL mode.")
 
 ;;; Multiline font-lock support
@@ -134,13 +167,13 @@ Sets match groups:
 Returns non-nil if the region was extended."
   (save-excursion
     (let ((changed nil))
-      ;; If beg is inside a /*~...*/ block, extend to include /*~
+      ;; If beg is inside a /*~...*/ or /* :require...*/ block, extend
       (goto-char font-lock-beg)
       (let ((open-pos (save-excursion
-                        (re-search-backward "/\\*~" nil t))))
+                        (re-search-backward "/\\*\\(~\\| :require\\)" nil t))))
         (when (and open-pos (< open-pos font-lock-beg))
           (goto-char open-pos)
-          ;; Only extend if there's no closing */ between that /*~ and beg
+          ;; Only extend if there's no closing */ between that open and beg
           (unless (re-search-forward "\\*/" font-lock-beg t)
             (setq font-lock-beg open-pos
                   changed t))))

@@ -29,7 +29,7 @@
 
 ;;; Code:
 
-(require 'rx)
+(eval-when-compile (require 'rx))
 
 (defgroup hug-sql nil
   "HugSQL support for SQL buffers."

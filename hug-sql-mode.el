@@ -24,8 +24,9 @@
 ;;   -- :name fn-name :? :1       function declaration
 ;;   /* :require [...] */          Clojure require block
 ;;
-;; Activate with `M-x hug-sql-mode' in a SQL buffer, or automatically
-;; via sql-mode-hook (enabled by default when this package is loaded).
+;; Activate with `M-x hug-sql-mode' in a SQL buffer, or add to your
+;; init file for automatic activation:
+;;   (add-hook 'sql-mode-hook #'hug-sql-mode)
 
 ;;; Code:
 
@@ -209,9 +210,6 @@ declarations."
     (remove-hook 'font-lock-extend-region-functions
                  #'hug-sql-mode--extend-region t))
   (font-lock-flush))
-
-;;;###autoload
-(add-hook 'sql-mode-hook #'hug-sql-mode)
 
 (provide 'hug-sql-mode)
 ;;; hug-sql-mode.el ends here
